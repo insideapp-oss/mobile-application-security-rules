@@ -1,0 +1,30 @@
+rules:
+  - id: insecure_random_number_generator
+    severity: WARNING
+    languages:
+      - java
+      - kotlin
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: LOW
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-CRYPTO-1
+        area: cryptography
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/android/MASVS-CRYPTO/MASTG-TEST-0016/
+    message: >-
+      This Android mobile application seems using an insecure random number generator, which could expose to various kind of vulnerabilities.
+      If the source of entropy is used for security purposes, make sure to use the `SecureRandom` API without specifying a seed.
+    pattern-either:
+        - pattern: new SecureRandom($SEED);
+        - pattern: SecureRandom($SEED);
+        - pattern: new Random()
+        - pattern: Random()
+        - pattern: Math.random(...)

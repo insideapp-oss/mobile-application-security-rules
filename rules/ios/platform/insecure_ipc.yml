@@ -1,0 +1,28 @@
+rules:
+  - id: insecure_ipc
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-PLATFORM-1
+        area: platform
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-PLATFORM/MASTG-TEST-0056/
+    message: >-
+      This iOS mobile application seems to be using an IPC mechanism, which could expose to various kind of vulnerabilities.
+      Please ensure that the application do not expose critical functionality or sensitive data that should not be accessible.
+    pattern-either:
+      - pattern: NSXPCConnection
+      - pattern: NSXPCInterface
+      - pattern: NSXPCListener
+      - pattern: NSFileCoordinator

@@ -1,0 +1,39 @@
+rules:
+  - id: weak_file_protection
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-STORAGE-1
+        area: storage
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-STORAGE/MASTG-TEST-0052/
+    message: >-
+      This iOS mobile application seems to be using a insufficient data protection class when storing some files locally into the device, which could expose sensitive data.
+      This data protection configuration could expose the files to undesiderated accesses because the data remain accessible under certain circumstances (i.e. jailbroken device).
+      It is recommended, when possible, to use the maximum data protection level `FileProtectionType.complete` or `URLFileProtection.complete`, or the secure write option `Data.WritingOptions.completeFileProtection`. 
+    pattern-either:
+      - pattern: FileProtectionType.none
+      - pattern: Data.WritingOptions.noFileProtection
+      - pattern: .noFileProtection
+      - pattern: URLFileProtection.none
+      - pattern: FileProtectionType.completeUnlessOpen
+      - pattern: .completeUnlessOpen
+      - pattern: Data.WritingOptions.completeFileProtectionUnlessOpen
+      - pattern: .completeFileProtectionUnlessOpen
+      - pattern: URLFileProtection.completeUnlessOpen
+      - pattern: FileProtectionType.completeUntilFirstUserAuthentication
+      - pattern: .completeUntilFirstUserAuthentication
+      - pattern: Data.WritingOptions.completeFileProtectionUntilFirstUserAuthentication
+      - pattern: .completeFileProtectionUntilFirstUserAuthentication
+      - pattern: URLFileProtection.completeUntilFirstUserAuthentication

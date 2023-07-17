@@ -1,0 +1,28 @@
+rules:
+  - id: insecure_hash_sha224
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-CRYPTO-1
+        area: cryptography
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/General/0x04g-Testing-Cryptography/#identifying-insecure-andor-deprecated-cryptographic-algorithms
+    message: >-
+      This iOS mobile application seems using the insecure SHA-224 algorithm, which could expose to various kind of vulnerabilities.
+      It is recommended to use the `SHA-256` or `SHA3` algorithm instead.
+    pattern-either:
+      - pattern: CC_SHA224_Init($CTX)
+      - pattern: CC_SHA224_Update($CTX, $DATA, $LEN)
+      - pattern: CC_SHA224_Final($MD, $CTX)
+      - pattern: CC_SHA224($DATA, $LEN, $MD)

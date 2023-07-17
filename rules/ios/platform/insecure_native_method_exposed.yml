@@ -1,0 +1,26 @@
+rules:
+  - id: insecure_native_method_exposed
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-PLATFORM-2
+        area: platform
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-PLATFORM/MASTG-TEST-0078
+    message: >-
+      This iOS mobile application seems to be exposing native method to JavaScript execution in WebView, which could expose to various kind of vulnerabilities.
+      Please ensure that the application do not expose critical functionality or sensitive data that should not be accessible.
+    pattern-either:
+      - pattern: JSContext
+      - pattern: JSVirtualMachine

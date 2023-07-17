@@ -1,0 +1,31 @@
+rules:
+  - id: unsecure_exported_activity
+    severity: WARNING
+    languages:
+      - xml
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: MEDIUM
+      impact: LOW
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-PLATFORM-1
+        area: platform
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/android/MASVS-PLATFORM/MASTG-TEST-0029/
+    message: >-
+      This Android mobile application seems to be exporting an activity. Any application on the device can launch the exported activity which may compromise the integrity of your application or its data. 
+      Ensure that any exported activities do not have privileged access to your application's control plane.
+    patterns:
+      - pattern-not-inside: |
+          <activity ... android:exported="false" ... />
+      - pattern-either:
+        - pattern: |
+            <activity ... android:exported="true" ... />
+        - pattern: |
+            <activity ... > ... <intent-filter> ... </activity>

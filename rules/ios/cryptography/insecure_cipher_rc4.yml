@@ -1,0 +1,28 @@
+rules:
+  - id: insecure_cipher_rc4
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-CRYPTO-1
+        area: cryptography
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/General/0x04g-Testing-Cryptography/#identifying-insecure-andor-deprecated-cryptographic-algorithms
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#cipher-modes
+    message: >-
+      This iOS mobile application seems using a weak cipher, `RC4`, which could expose to various kind of vulnerabilities.
+      The data encrypted using `RC4` mode block could allow to retrieve its plain-text value. 
+      It is recommended to avoid the use of `RC4`, and use `AES` instead.
+    pattern-either:
+      - pattern: kCCAlgorithmRC4
+      - pattern: kCCModeRC4

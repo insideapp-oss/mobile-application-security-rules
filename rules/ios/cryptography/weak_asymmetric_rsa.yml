@@ -1,0 +1,26 @@
+rules:
+  - id: weak_asymmetric_rsa
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-CRYPTO-1
+        area: cryptography
+        level:
+          - L1
+          - L2
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#algorithms
+        - https://mas.owasp.org/MASTG/General/0x04g-Testing-Cryptography/#insufficient-key-length
+        - https://www.keylength.com/en/4/
+    message: >-
+      This iOS mobile application seems using an asymmetric algorithm, `RSA`, which might be configured weakly, which could expose to various kind of vulnerabilities.
+      RSA keys should be at least 3072 bits based on NIST recommendation.
+    pattern: kSecAttrKeyTypeRSA

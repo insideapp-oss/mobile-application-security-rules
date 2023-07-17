@@ -1,0 +1,26 @@
+rules:
+  - id: device_access_security_policy
+    severity: WARNING
+    languages:
+      - xml
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: LOW
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-STORAGE-1
+        area: storage
+        level:
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/android/MASVS-STORAGE/MASTG-TEST-0012
+    message: >-
+      This Android mobile application seems to be targeting a API level earlier than 23, which could expose to various kind of vulnerabilities.
+      Please up use the a newer version.
+    patterns:
+      - pattern: <uses-sdk android:minSdkVersion="$X" />
+      - metavariable-comparison:
+          comparison: int($X)<23

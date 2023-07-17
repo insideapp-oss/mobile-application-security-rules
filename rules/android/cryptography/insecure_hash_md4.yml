@@ -1,0 +1,30 @@
+rules:
+  - id: insecure_hash_md4
+    severity: WARNING
+    languages:
+      - java 
+      - kotlin
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-CRYPTO-1
+        area: cryptography
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/General/0x04g-Testing-Cryptography/#identifying-insecure-andor-deprecated-cryptographic-algorithms
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#cipher-modes
+    message: >-
+      This Android mobile application seems using the insecure MD4 algorithm, which could expose to various kind of vulnerabilities.
+      It is recommended to use the `SHA-256` or `SHA3` algorithm instead.
+    pattern-either:
+      - pattern: $VAR = MessageDigest.getInstance("MD4")
+      - pattern: DigestUtils.getMd4Digest()
+      - pattern: DigestUtils.md4(...)
+      - pattern: DigestUtils.md4Hex(...)

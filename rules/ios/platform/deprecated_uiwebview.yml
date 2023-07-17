@@ -1,0 +1,27 @@
+rules:
+  - id: deprecated_uiwebview
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-PLATFORM-2
+        area: platform
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-PLATFORM/MASTG-TEST-0076/
+    message: >-
+      This iOS mobile application seems using an insecure WebView in-app browser, which could expose to various kind of vulnerabilities.
+      More specifically, the usage of the deprecated `UIWebView` should be avoided, because it suffers of various security issues.
+      It is recommended to use the `WKWebView` component properly configured in the mobile app, if the usage
+      of `SFSafariViewController` is a requirements, it is suggested to adopt it only in trusted contexts.
+    pattern: UIWebView

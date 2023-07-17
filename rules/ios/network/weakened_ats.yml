@@ -1,0 +1,62 @@
+rules:
+  - id: weakened_ats
+    severity: WARNING
+    languages:
+      - xml
+    metadata:
+      category: security
+      confidence: LOW
+      likelihood: LOW
+      impact: LOW
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-NETWORK-1
+        area: network
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-NETWORK/MASTG-TEST-0065/#testing-for-cleartext-traffic
+    message: >-
+      This iOS mobile application seems to be using a configuration that weakened App Transport Security, which could expose to various kind of vulnerabilities.
+    pattern-either:
+      - patterns:
+        - pattern-inside: |
+            <dict>
+              ...
+              <key>$KEY_TRUE</key>
+              <true/>
+              ...
+            </dict>
+        - focus-metavariable: $KEY_TRUE
+        - metavariable-regex:
+            metavariable: $KEY_TRUE
+            regex: (NSAllowsArbitraryLoads|NSAllowsArbitraryLoadsForMedia|NSAllowsArbitraryLoadsInWebContent|NSAllowsLocalNetworking|NSTemporaryExceptionAllowsInsecureHTTPLoads|NSThirdPartyExceptionAllowsInsecureHTTPLoads|NSExceptionAllowsInsecureHTTPLoads|NSIncludesSubdomains)
+      - patterns:
+        - pattern-inside: |
+            <dict>
+              ...
+              <key>$KEY_FALSE</key>
+              <false/>
+              ...
+            </dict>
+        - focus-metavariable: $KEY_FALSE
+        - metavariable-regex:
+            metavariable: $KEY_FALSE
+            regex: (NSExceptionRequiresForwardSecrecy)
+      - patterns:
+        - pattern-inside: |
+            <dict>
+              ...
+              <key>$KEY</key>
+              <string>$VERSION</string>
+              ...
+            </dict>
+        - focus-metavariable: $KEY
+        - metavariable-regex:
+            metavariable: $KEY
+            regex: (NSExceptionMinimumTLSVersion)
+        - metavariable-regex:
+            metavariable: $VERSION
+            regex: (TLSv1.0|TLSv1.1)

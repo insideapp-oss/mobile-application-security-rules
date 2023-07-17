@@ -1,0 +1,29 @@
+rules:
+  - id: weak_keychain
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-STORAGE-1
+        area: storage
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-STORAGE/MASTG-TEST-0052
+    message: >-
+      This iOS mobile application seems to be configured with a weak Keychain protection, which could expose sensitive data.
+      Specifically the deprecated Keychain attributes `kSecAttrAccessibleAlways` or `kSecAttrAccessibleAlwaysThisDeviceOnly` could
+      allow an attacker to access the data stored in the corresponding Keychain item, regardless of whether the device is locked.
+      It is recommended to use an adequate protection level for Keychain data, possibly having the `ThisDeviceOnly` suffix, related with the level of confidentiality required for the stored data. 
+      Note that by default the `kSecAttrAccessible` flag for Keychain is set to `kSecAttrAccessibleWhenUnlocked`.
+    pattern-either:
+      - pattern: kSecAttrAccessibleAlways
+      - pattern: kSecAttrAccessibleAlwaysThisDeviceOnly

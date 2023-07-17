@@ -1,0 +1,27 @@
+rules:
+  - id: sensitive_log
+    severity: INFO
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-STORAGE-2
+        area: storage
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-STORAGE/MASTG-TEST-0053/
+    message: >-
+      This iOS mobile application seems to be using a logger that does not provide privacy configuration, which could expose to sensitive data.
+      It is recommended to use `os_log` (iOS 10+) or `Logger` (iOS 14+).
+    pattern-either:
+      - pattern: print
+      - pattern: NSLog
+      - pattern: os_signpost

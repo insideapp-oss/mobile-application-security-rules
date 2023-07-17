@@ -1,0 +1,26 @@
+rules:
+  - id: insecure_javascript_execution
+    severity: WARNING
+    languages: 
+      - java
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-PLATFORM-2
+        area: platform
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/android/MASVS-PLATFORM/MASTG-TEST-0031/
+    message: >-
+      This Android mobile application seems to be allowing JavaScript execution in WebView, which could expose to various kind of vulnerabilities.
+      If JavaScript is required for the application to function normally, please ensure that the application follows the all best practices.
+    pattern-either:  
+      - pattern: (WebSettings $S).setJavaScriptEnabled(true)
+      - pattern: $X.setJavaScriptEnabled(true)

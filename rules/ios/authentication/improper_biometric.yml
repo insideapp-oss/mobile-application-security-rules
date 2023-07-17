@@ -1,0 +1,33 @@
+rules:
+  - id: improper_biometric
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-AUTH-2
+        area: authentication
+        level:
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-AUTH/MASTG-TEST-0064/
+    message: >-
+      This iOS mobile application seems using an insecure biometric API, which could expose to various kind of vulnerabilities.
+      More specifically, the usage of `LocalAuthentication.framework` should be avoided, because it suffers of various security issues.
+      It is recommended to use `Security.framework`.
+    pattern-either:
+      - patterns:
+          - pattern-inside: |
+              $CONTEXT = LAContext(...)
+              ...
+              $CONTEXT.$FUNC(...)
+          - focus-metavariable: $FUNC
+          - metavariable-regex:
+              metavariable: $FUNC
+              regex: (evaluatePolicy)

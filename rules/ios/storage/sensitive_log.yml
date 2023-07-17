@@ -1,0 +1,39 @@
+rules:
+  - id: sensitive_log
+    severity: INFO
+    languages: 
+      - swift
+    metadata:
+      category: security
+      cwe: "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-STORAGE-2
+        area: storage
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-STORAGE/MASTG-TEST-0053/
+    message: >-
+      This iOS mobile application seems to be using a logger, which could expose to sensitive data.
+      It is recommended to check if the logger is properly configured in the mobile app, to not disclose any sensitive data.
+    pattern-either:
+      - patterns:
+          - pattern: os_log("$MESSAGE", ...)
+          - metavariable-regex:
+              metavariable: $MESSAGE
+              regex: .*(%{public}@).*
+      - patterns:
+          - pattern-inside: |
+              let $LOGGER = Logger(...)
+              ...
+              $LOGGER.$FUNC(...)
+          - focus-metavariable: $FUNC
+          - metavariable-regex:
+              metavariable: $FUNC
+              regex: (log|notice|debug|trace|info|error|warning|fault|critical)

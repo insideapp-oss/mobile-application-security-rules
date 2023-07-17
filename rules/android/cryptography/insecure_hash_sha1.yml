@@ -1,0 +1,31 @@
+rules:
+  - id: insecure_hash_sha1
+    severity: WARNING
+    languages:
+      - java
+      - kotlin
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: HIGH
+      impact: HIGH
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-CRYPTO-1
+        area: cryptography
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/General/0x04g-Testing-Cryptography/#identifying-insecure-andor-deprecated-cryptographic-algorithms
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#cipher-modes
+    message: >-
+      This Android mobile application seems using the insecure SHA-1 algorithm, which could expose to various kind of vulnerabilities.
+      SHA-1 is not collision resistant and is therefore not suitable as a cryptographic signature.
+      It is recommended to use the `SHA-256` or `SHA3` algorithm instead.
+    pattern-either:
+      - pattern: $VAR = MessageDigest.getInstance("SHA1")
+      - pattern: DigestUtils.getSha1Digest()
+      - pattern: DigestUtils.sha1(...)
+      - pattern: DigestUtils.sha1Hex(...)
