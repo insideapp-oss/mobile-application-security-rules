@@ -1,0 +1,45 @@
+rules:
+  - id: weak_kdf_pbkdf2_sha1
+    severity: WARNING
+    languages: 
+      - java
+      - kotlin
+    metadata:
+      category: security
+      confidence: MEDIUM
+      likelihood: LOW
+      impact: MEDIUM
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-CRYPTO-1
+        area: cryptography
+        level:
+          - L1
+          - L2
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#pbkdf2
+        - https://mas.owasp.org/MASTG/General/0x04g-Testing-Cryptography/#weak-key-generation-functions
+        - https://github.com/p-h-c/phc-winner-argon2
+    message: >-
+      This Android mobile application seems using a key derivation function, `PBKDF2`, configured weakly, which could expose to various kind of vulnerabilities.
+      PBKDF2 function using the SHA-1 hashing algorithm should be used with at least 1 300 000 iterations based on OWASP recommendation.
+      Please consider implementation of algorithms recognized by Password Hashing Competition (PHC) like Argon2, for critical keys.
+    patterns:
+      - pattern-either:
+        - pattern: |
+            SecretKeyFactory $SKF = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            ...
+            PBEKeySpec $SPEC = new PBEKeySpec($PASS, $SALT, $ITERATIONS, $LENGTH);
+            ...
+            $KEY = $SKF.generateSecret($SPEC);
+        - pattern: |
+            $SKF = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            ...
+            $SPEC = PBEKeySpec($PASS, $SALT, $ITERATIONS, $LENGTH);
+            ...
+            $KEY = $SKF.generateSecret($SPEC);
+      - focus-metavariable: $ITERATIONS
+      - metavariable-comparison:
+          metavariable: $ITERATIONS
+          comparison: $ITERATIONS < 1300000
