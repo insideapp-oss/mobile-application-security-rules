@@ -1,0 +1,23 @@
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: macos-13
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Set up semgrep
+      run: |
+        # semgrep test is currently broken on macOS: https://github.com/returntocorp/semgrep/issues/8120
+        curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/2423bb547849f6dbb9b7a44ce895b4c15be2065a/Formula/semgrep.rb
+        brew install semgrep.rb
+
+    - name: Check semgrep version
+      run: semgrep --version
+
+    - name: Run semgrep tests
+      run: semgrep scan --test --config rules tests
