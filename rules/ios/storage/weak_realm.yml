@@ -1,0 +1,52 @@
+rules:
+  - id: weak_realm
+    severity: INFO
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: HIGH
+      likelihood: LOW
+      impact: LOW
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-STORAGE-1
+        area: storage
+        level:
+          - L1
+      references:
+        - https://mas.owasp.org/MASTG/iOS/0x06d-Testing-Data-Storage/#realm-databases
+        - https://www.mongodb.com/docs/realm/sdk/swift/realm-files/encrypt-a-realm/
+    message: >-
+      This iOS mobile application seems to be using a Realm database with a weak configuration, which could expose to various kind of vulnerabilities.
+      If the database stores sensitive data, make sure to encrypt the Realm database using a custom `Realm.Configuration`.
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              $CONFIG = Realm.Configuration()
+              ...
+              $REALM = try Realm(..., configuration: $CONFIG, ...)
+          - pattern-inside: |
+              $CONFIG = .init()
+              ...
+              $REALM = try Realm(..., configuration: $CONFIG, ...)
+          - pattern-inside: |
+              $CONFIG = Realm.Configuration(...)
+              ...
+              $REALM = try Realm(..., configuration: $CONFIG, ...)
+          - pattern-inside: |
+              $CONFIG = .init(...)
+              ...
+              $REALM = try Realm(..., configuration: $CONFIG, ...)
+          - pattern-inside: |
+              $REALM = try Realm(...)
+      - pattern-not-inside: |
+          $CONFIG = Realm.Configuration(..., encryptionKey: $KEY, ...)
+          ...
+          $REALM = try Realm(..., configuration: $CONFIG, ...) 
+      - pattern-not-inside: |
+          $CONFIG = .init(..., encryptionKey: $KEY, ...)
+          ...
+          $REALM = try Realm(..., configuration: $CONFIG, ...)      
+      - focus-metavariable: $REALM
