@@ -1,0 +1,24 @@
+rules:
+  - id: insecure_pasteboard
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-PLATFORM-1
+        area: platform
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-PLATFORM/MASTG-TEST-0073/
+    message: >-
+      This iOS mobile application seems to be using the systemwide general pasteboard, which could expose to various kind of vulnerabilities.
+      Please ensure that the application do not expose sensitive data through the general pasteboard since any other application can read it.
+    pattern: UIPasteboard.general

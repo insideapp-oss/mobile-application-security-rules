@@ -1,0 +1,25 @@
+rules:
+  - id: deprecated_persistent_pasteboard
+    severity: WARNING
+    languages: 
+      - swift
+    metadata:
+      category: security
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: MEDIUM
+      subcategory:
+        - vuln
+      owasp-mas:
+        identifier: MASVS-PLATFORM-1
+        area: platform
+        level:
+          - L1
+          - L2
+      references:
+        - https://mas.owasp.org/MASTG/tests/ios/MASVS-PLATFORM/MASTG-TEST-0073/
+        - https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/EntitlementKeyReference/Chapters/EnablingAppSandbox.html#//apple_ref/doc/uid/TP40011195-CH4-SW19
+    message: >-
+      This iOS mobile application seems to be using a persistent pasteboard, which could expose to various kind of vulnerabilities.
+      Persistent pasteboard are deprecated since iOS 10. If you wish to share data between your applications, please use a shared app group container.
+    pattern: $PASTEBOARD.setPersistent(true)
