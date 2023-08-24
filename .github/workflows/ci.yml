@@ -12,9 +12,7 @@ jobs:
     
     - name: Set up semgrep
       run: |
-        # semgrep test is currently broken on macOS: https://github.com/returntocorp/semgrep/issues/8120
-        curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/2423bb547849f6dbb9b7a44ce895b4c15be2065a/Formula/semgrep.rb
-        brew install semgrep.rb
+        brew install semgrep
 
     - name: Check semgrep version
       run: semgrep --version
